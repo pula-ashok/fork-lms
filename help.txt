@@ -1,1 +1,1 @@
-help file
+Here we will update the url for client and server
