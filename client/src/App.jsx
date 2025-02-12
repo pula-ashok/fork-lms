@@ -14,7 +14,7 @@ import Navbar from './components/student/Navbar';
 const App = () => {
   const isEducatorRoute = useMatch("/educator/*");
   return (
-    <di className="text-default min-h-screen bg-white">
+    <div className="text-default min-h-screen bg-white">
       {!isEducatorRoute &&<Navbar/>}
       <Routes>
         <Route path='/' element={<Home/>}/>
@@ -30,7 +30,7 @@ const App = () => {
           <Route path='students-enrolled' element={<StudentsEnrolled/>}/>
         </Route>
       </Routes>
-    </di>
+    </div>
   )
 }
 
