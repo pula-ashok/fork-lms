@@ -1,5 +1,6 @@
 import React from 'react'
 import { assets } from './../../assets/assets';
+import SearchBar from './SearchBar';
 
 const Hero = () => {
   return (
@@ -8,6 +9,7 @@ const Hero = () => {
       <p className='hidden md:block text-gray-500 max-w-2xl mx-auto'>We bring together world-class instructors, interactive content, and a supportive
       community to help you achieve your personal and professional goals.</p>
       <p className=' md:hidden max-w-sm mx-auto'>We bring together world-class instructors, interactive content, and a supportive</p>
+      <SearchBar data=""/>
     </div>
   )
 }
