@@ -4,12 +4,16 @@ import { useParams } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext';
 import { assets } from '../../assets/assets';
 import humanizeDuration from 'humanize-duration';
+import Loading from './../../components/student/Loading';
+import Footer from '../../components/student/Footer';
+import Youtube from "react-youtube"
 
 const CourseDetails = () => {
   const {id} = useParams();
   const [courseData, setCourseData] = useState(null);
   const [openSections, setOpenSections] = useState({})
   const [alreadyEnrolled, setAlreadyEnrolled] = useState(false)
+  const [playerData, setPlayerData] = useState(null)
   const {currency, allCourses,calculateRating,calculateChaptertime,calculateCourseDuration,calculateLectures} = useContext(AppContext);
   const fetchCourseData = async() =>{
     const course = allCourses.find(course=>course._id === id);
@@ -17,12 +21,13 @@ const CourseDetails = () => {
   }
   useEffect(()=>{
     fetchCourseData();
-  },[allCourses,id])
+  },[allCourses])
   const toggleSections=(id)=>{
     setOpenSections(prev=>({...prev,[id]:!prev[id]}))
   }
-  console.log(courseData)
-  return (
+  console.log(playerData)
+  return courseData ?
+    <>
     <div className='relative flex md:flex-row flex-col-reverse gap-10 items-start justify-between md:px-36 px-8 md:pt-36 pt-20 text-left'>
       <div className='absolute top-0 left-0 w-full h-section-height -z-1 bg-gradient-to-b from-cyan-100/50'></div>
       {/* left section  */}
@@ -60,7 +65,9 @@ const CourseDetails = () => {
                           <div className='flex items-center justify-between w-full text-gray-800 text-xs md:text-default'>
                           <p>{lecture?.lectureTitle}</p>
                           <div className='flex gap-2'>
-                            {lecture?.isPreviewFree && <p className='text-blue-500 cursor-pointer'>Preview</p>}
+                            {lecture?.isPreviewFree && <p className='text-blue-500 cursor-pointer' onClick={()=>setPlayerData({
+                              videoId :lecture?.lectureUrl.split("/").pop()
+                            })}>Preview</p>}
                             <p>{humanizeDuration(lecture?.lectureDuration*60*1000,{units:["h","m"]})} </p>
                           </div>
                           </div>
@@ -81,7 +88,8 @@ const CourseDetails = () => {
       </div>
       {/* right section  */}
       <div className='max-w-course-card z-10 shadow-custom-card rounded-t md:rounded-none overflow-hidden bg-white min-w-[300px] sm:min-w-[420px]'>
-        <img src={courseData?.courseThumbnail} alt="thumbnail" />
+        {playerData ?
+            <Youtube videoId={playerData.videoId} opts={{playerVars:{autoplay:1}}} iframeClassName='w-full aspect-video'/>: <img src={courseData?.courseThumbnail} alt="thumbnail" />}
         <div className='p-5'>
           <div className='flex items-center gap-2'>
             <img src={assets.time_left_clock_icon} alt="clock icon" className='w-3.5' />
@@ -123,7 +131,9 @@ const CourseDetails = () => {
         </div>      
       </div>
     </div>
-  )
+    <Footer/>
+    </>
+  :<Loading/>
 }
 
 export default CourseDetails
