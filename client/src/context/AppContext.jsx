@@ -1,18 +1,27 @@
 import { createContext, useEffect, useState } from "react";
 import { dummyCourses } from "../assets/assets";
 import humanizeDuration from "humanize-duration"
+import { useNavigate } from "react-router-dom";
 
 export const AppContext = createContext(null);
 
 const AppContextProvider = ({ children }) => {
   const [allCourses, setAllCourses] = useState([])
+  const [enrolledCourses, setEnrolledCourses] = useState([])
+  const navigate = useNavigate();
   const currency = import.meta.env.VITE_CURRENCY;
   //fetch all courses
   const fetchAllCourses = async()=>{
     setAllCourses(dummyCourses)
   }
+  //fetch user enorlled courses
+  const fetchUserEnrolledCourses = async()=>{
+      setEnrolledCourses(dummyCourses)
+  }
   useEffect(()=>{
-    fetchAllCourses()},[])
+    fetchAllCourses()
+    fetchUserEnrolledCourses()
+  },[])
   const calculateRating = course =>{
       if(course?.courseRatings?.length <= 0){
         return 0;
@@ -42,7 +51,7 @@ const AppContextProvider = ({ children }) => {
     });
     return totalLectures;
   }
-  const value = {currency,allCourses,calculateRating,calculateChaptertime,calculateCourseDuration,calculateLectures};
+  const value = {currency,navigate,allCourses,calculateRating,calculateChaptertime,calculateCourseDuration,calculateLectures,enrolledCourses};
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 

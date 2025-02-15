@@ -3,13 +3,12 @@ import SearchBar from '../../components/student/SearchBar'
 import { AppContext } from '../../context/AppContext'
 import CourseCard from '../../components/student/CourseCard'
 import Footer from '../../components/student/Footer'
-import { useNavigate, useParams } from 'react-router-dom'
+import {useParams } from 'react-router-dom'
 import { assets } from '../../assets/assets'
 
 const CoursesList = () => {
-  const {allCourses} = useContext(AppContext);
+  const {allCourses,navigate} = useContext(AppContext);
   const {input} = useParams();
-  const navigate = useNavigate();
   const [filteredCourses, setFilteredCourses] = useState([]);
   useEffect(()=>{
     if(allCourses?.length>0){
